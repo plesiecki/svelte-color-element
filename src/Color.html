@@ -1,0 +1,53 @@
+<svg><filter id={{id}} color-interpolation-filters="sRGB">
+<feColorMatrix values="0 0 0 0 {{r}} 0 0 0 0 {{g}} 0 0 0 0 {{b}} 0 0 0 1 0" />
+</filter></svg>
+<div class="filter" style="filter:url(#{{id}})" on:click="color(0, 0, 0)">
+	{{#if src}}
+		<img :src :alt>
+	{{else}}
+		<slot></slot>
+	{{/if}}
+</div>
+
+<style>
+	svg {
+		width: 0;
+		height: 0;
+		position: absolute;
+	}
+	.filter {
+		display: block;
+		width: 30px;
+		height: 30px;
+		/* filter: var(--filter) */
+	}
+</style>
+
+<script>
+	import nanoid from 'nanoid';
+
+	function round(number, places = 3) {
+		const m = Math.pow(10, places)
+		return Math.floor(number * m) / m
+	}
+	export default {
+		data() {
+			return {
+				red: 0,
+				green: 0,
+				blue: 0,
+				id: nanoid(10)
+			}
+		},
+		computed: {
+			r: red => round(red / 255),
+			g: green => round(green / 255),
+			b: blue => round(blue / 255)
+		},
+		methods: {
+      color(red, green, blue) {
+        this.set({red, green, blue})
+      }
+    }
+	}
+</script>
